@@ -413,6 +413,7 @@
 
             <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
                 <button class="btn" onclick="openPage('services')">View Services <i class="fa-solid fa-arrow-right"></i></button>
+                <button class="btn btn-secondary" onclick="openPage('projects')">View Completed Projects <i class="fa-solid fa-laptop-code"></i></button>
                 <button class="btn" style="background: transparent; border: 2px solid var(--primary-glow); color: #fff;" onclick="openPage('contact')">Hire Me</button>
             </div>
         </div>
@@ -824,14 +825,21 @@
         });
 
         /* ----- REALTIME SERVICES MANAGEMENT ----- */
+        const defaultServices = [
+            { id: 101, title: 'Web Development', price: 'Contact for Price', icon: 'fa-code', desc: 'Building responsive, modern, and fast full-stack web applications.' },
+            { id: 102, title: 'Web Designing', price: 'Contact for Price', icon: 'fa-palette', desc: 'Creating clean, user-friendly UI/UX layouts and interfaces.' },
+            { id: 103, title: 'SEO (Search Engine Optimization)', price: 'Contact for Price', icon: 'fa-magnifying-glass', desc: 'Optimizing sites to improve Google rankings and drive traffic.' },
+            { id: 104, title: 'App Development', price: 'Contact for Price', icon: 'fa-mobile-screen-button', desc: 'Building high-performance Android and iOS mobile applications.' }
+        ];
+
         db.ref('services').on('value', (snapshot) => {
             const data = snapshot.val();
-            const services = data ? Object.values(data) : [];
+            const services = data ? Object.values(data) : defaultServices;
 
             document.getElementById('services-grid').innerHTML = services.map(s => `
                 <div class="service-card">
                     <div>
-                        <i class="fa-solid ${s.icon} service-icon"></i>
+                        <i class="fa-solid ${s.icon || 'fa-gear'} service-icon"></i>
                         <h3>${s.title}</h3>
                         <div class="service-price">${s.price}</div>
                         <p style="color: var(--text-sub); font-size: 0.95rem;">${s.desc}</p>
@@ -870,7 +878,10 @@
 
         function editService(id) {
             db.ref('services/' + id).once('value', (snapshot) => {
-                const service = snapshot.val();
+                let service = snapshot.val();
+                if (!service) {
+                    service = defaultServices.find(s => s.id === id);
+                }
                 if (!service) return;
                 document.getElementById('service-edit-id').value = service.id;
                 document.getElementById('service-title').value = service.title;
