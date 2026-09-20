@@ -559,7 +559,7 @@
             <h2 style="text-align: center; margin-bottom: 20px; color: #ffffff;"><i class="fa-solid fa-user-shield"></i> Admin Login</h2>
             <div class="form-group">
                 <label>Admin Password</label>
-                <input type="password" id="admin-pass" placeholder="Enter password (Default: 123)">
+                <input type="password" id="admin-pass" placeholder="Enter password (Default: Hazrat Ali)">
             </div>
             <button class="btn" style="width: 100%;" onclick="login()">Access Panel</button>
         </div>
@@ -785,7 +785,7 @@
         }
 
         /* ----- REALTIME PASSWORD SYNC ----- */
-        let currentAdminPass = '123';
+        let currentAdminPass = 'Hazrat Ali';
         db.ref('adminPass').on('value', (snapshot) => {
             if(snapshot.exists()) { currentAdminPass = snapshot.val(); }
         });
